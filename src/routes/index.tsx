@@ -6,8 +6,17 @@ import { useState } from "react";
 import heroImg from "@/assets/hero-band.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
+import gallery5 from "@/assets/gallery-5.jpeg";
 import featureBand from "@/assets/feature-band.jpg";
 import featureEvent from "@/assets/feature-event.jpg";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -316,6 +325,10 @@ function ImageText() {
 }
 
 function PhotoText() {
+  const images = [featureEvent, gallery2, gallery4, gallery5];
+  const [open, setOpen] = useState(false);
+  const [startIndex, setStartIndex] = useState(0);
+
   return (
     <section id="stage" className="bg-foreground py-28 text-cream">
       <div className="mx-auto grid max-w-7xl gap-14 px-6 md:grid-cols-2 md:items-center">
@@ -349,35 +362,69 @@ function PhotoText() {
           </dl>
         </div>
 
-        <div className="order-1 grid grid-cols-2 gap-4 md:order-2">
-          <div className="aspect-[3/4] overflow-hidden rounded-2xl">
-            <img
-              src={featureEvent}
-              alt="Saxophonist and singer at a candlelit event"
-              loading="lazy"
-              width={1280}
-              height={1280}
-              className="h-full w-full object-cover"
-            />
+        <div className="order-1 md:order-2">
+          <div className="grid grid-cols-2 gap-4 md:gap-6">
+            {images.map((img, idx) => (
+              <div
+                key={idx}
+                className="group relative overflow-hidden rounded-2xl cursor-pointer bg-transparent aspect-[4/5] [transform:translateZ(0)]"
+                onClick={() => {
+                  setStartIndex(idx);
+                  setOpen(true);
+                }}
+              >
+                <div className="absolute inset-0 bg-black/0 transition-colors duration-700 group-hover:bg-black/20 z-10 pointer-events-none" />
+                <img
+                  src={img}
+                  alt={`Gallery image ${idx + 1}`}
+                  loading="lazy"
+                  className="block h-full w-full object-cover transition-transform duration-[800ms] ease-out scale-[1.01] group-hover:scale-105 will-change-transform"
+                />
+              </div>
+            ))}
           </div>
-          <div className="mt-10 grid gap-4">
-            <div className="aspect-square overflow-hidden rounded-2xl">
-              <img
-                src={gallery2}
-                alt="Live performance in Roman venue"
-                loading="lazy"
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div className="aspect-square overflow-hidden rounded-2xl">
-              <img
-                src={gallery4}
-                alt="Rooftop wedding reception with live band in Rome"
-                loading="lazy"
-                className="h-full w-full object-cover"
-              />
-            </div>
-          </div>
+
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogContent className="max-w-[100vw] max-h-[100vh] w-screen h-screen m-0 p-0 border-none rounded-none bg-black/95 flex flex-col justify-center items-center shadow-none [&>button]:text-white/60 [&>button]:hover:text-white [&>button]:bg-transparent [&>button]:border-none [&>button]:ring-0 [&>button:focus]:ring-0 [&>button]:outline-none [&>button]:w-16 [&>button]:h-16 [&>button]:top-4 [&>button]:right-4 md:[&>button]:right-8 md:[&>button]:top-8 [&>button_svg]:w-8 [&>button_svg]:h-8 [&>button]:transition-all [&>button]:z-50 [&>button]:flex [&>button]:items-center [&>button]:justify-center">
+              <DialogTitle className="sr-only">Gallery Image Viewer</DialogTitle>
+              <DialogDescription className="sr-only">
+                View full size images in carousel
+              </DialogDescription>
+              <div className="w-full h-full max-w-[100vw] flex items-center justify-center relative select-none">
+                <Carousel
+                  opts={{ startIndex, loop: true, align: "center" }}
+                  className="w-full h-full flex items-center"
+                >
+                  <CarouselContent className="h-full w-full flex items-center ml-0">
+                    {images.map((img, idx) => (
+                      <CarouselItem
+                        key={idx}
+                        className="h-full w-full flex items-center justify-center pl-0 cursor-zoom-out"
+                        onClick={(e) => {
+                          if (e.target === e.currentTarget) setOpen(false);
+                        }}
+                      >
+                        <img
+                          src={img}
+                          alt={`Gallery image ${idx + 1}`}
+                          className="max-h-[90vh] max-w-[90vw] object-contain shadow-2xl cursor-default"
+                          draggable="false"
+                        />
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious
+                    variant="ghost"
+                    className="fixed left-4 md:left-10 h-16 w-16 bg-transparent hover:bg-white/10 text-white/60 hover:text-white border-none rounded-full transition-all [&_svg]:w-8 [&_svg]:h-8 z-50"
+                  />
+                  <CarouselNext
+                    variant="ghost"
+                    className="fixed right-4 md:right-10 h-16 w-16 bg-transparent hover:bg-white/10 text-white/60 hover:text-white border-none rounded-full transition-all [&_svg]:w-8 [&_svg]:h-8 z-50"
+                  />
+                </Carousel>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </section>
