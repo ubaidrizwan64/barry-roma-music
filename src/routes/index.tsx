@@ -3,7 +3,7 @@ import { ReservationForm } from "@/components/ReservationForm";
 import { Button } from "@/components/ui/button";
 import { Cake, GlassWater, Briefcase, Star, Instagram, Mail, Phone, MapPin } from "lucide-react";
 import { useState } from "react";
-import heroImg from "@/assets/hero-band.jpg";
+import heroImg from "@/assets/hero-band.jpeg";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
 import gallery5 from "@/assets/gallery-5.jpeg";
@@ -112,7 +112,7 @@ function Hero() {
           In diretta da Roma
         </p>
         <h1 className="mt-4 max-w-3xl animate-fade-up font-display text-3xl leading-[0.95] text-cream text-balance sm:text-4xl md:text-6xl">
-          IN DIRETTA DA <em className="text-accent"> ROMA</em>
+          Organizza il tuo evento privato
         </h1>
         <p className="mt-6 max-w-xl animate-fade-up text-lg leading-relaxed text-cream/85"></p>
         <div className="mt-10 flex animate-fade-up flex-wrap gap-4">
@@ -121,7 +121,7 @@ function Hero() {
             size="lg"
             className="bg-gradient-gold text-gold-foreground shadow-gold hover:opacity-95"
           >
-            <a href="#book">Contattaci</a>
+            <a href="#book">PRENOTA ORA</a>
           </Button>
         </div>
       </div>
