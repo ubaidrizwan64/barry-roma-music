@@ -1,7 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ReservationForm } from "@/components/ReservationForm";
 import { Button } from "@/components/ui/button";
-import { Cake, GlassWater, Briefcase, Star, Instagram, Mail, Phone, MapPin } from "lucide-react";
+import {
+  Menu,
+  Cake,
+  GlassWater,
+  Briefcase,
+  Star,
+  Instagram,
+  Mail,
+  Phone,
+  MapPin,
+} from "lucide-react";
 import { useState } from "react";
 import heroImg from "@/assets/hero-band.jpeg";
 import gallery2 from "@/assets/gallery-2.jpg";
@@ -10,6 +20,13 @@ import gallery5 from "@/assets/gallery-5.jpeg";
 import featureBand from "@/assets/feature-band.jpg";
 import featureEvent from "@/assets/feature-event.jpg";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
 import {
   Carousel,
   CarouselContent,
@@ -67,29 +84,73 @@ function TopBanner() {
 }
 
 function Nav() {
+  const navLinks = [
+    { href: "#events", label: "Eventi" },
+    { href: "#story", label: "Trama" },
+    { href: "#stage", label: "Palcoscenico" },
+    { href: "#reviews", label: "Recensioni" },
+    { href: "#book", label: "Libro" },
+  ];
+
   return (
     <header className="absolute inset-x-0 top-2 z-30 bg-transparent bg-gradient-to-b from-foreground/5">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
-        <a href="#top" className="font-display text-2xl tracking-wide text-cream">
-          Mr Barry <span className="text-accent">Roma</span>
-        </a>
+        <a href="#top" className="font-display text-2xl tracking-wide text-cream"></a>
+
+        {/* Desktop Nav */}
         <nav className="hidden gap-8 text-sm text-cream/80 md:flex">
-          <a href="#events" className="transition hover:text-cream">
-            Eventi
-          </a>
-          <a href="#story" className="transition hover:text-cream">
-            Trama
-          </a>
-          <a href="#stage" className="transition hover:text-cream">
-            Palcoscenico
-          </a>
-          <a href="#reviews" className="transition hover:text-cream">
-            Recensioni
-          </a>
-          <a href="#book" className="transition hover:text-cream">
-            Libro
-          </a>
+          {navLinks.map((link) => (
+            <a key={link.href} href={link.href} className="transition hover:text-cream">
+              {link.label}
+            </a>
+          ))}
         </nav>
+
+        {/* Mobile Nav */}
+        <div className="md:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-cream hover:bg-white/20 hover:text-cream"
+              >
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Toggle navigation menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className="bg-background/95 backdrop-blur-md border-l-0 w-[300px] sm:w-[400px]"
+            >
+              <SheetTitle className="sr-only">Navigazione</SheetTitle>
+              <SheetDescription className="sr-only">Menu di navigazione del sito</SheetDescription>
+              <nav className="flex flex-col gap-6 mt-12 text-center">
+                {navLinks.map((link) => (
+                  <SheetTrigger asChild key={link.href}>
+                    <a
+                      href={link.href}
+                      className="font-display text-2xl text-foreground hover:text-primary transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  </SheetTrigger>
+                ))}
+                <div className="pt-8 mt-8 border-t border-border">
+                  <SheetTrigger asChild>
+                    <Button
+                      asChild
+                      size="lg"
+                      className="w-full bg-gradient-gold text-gold-foreground shadow-gold hover:opacity-95"
+                    >
+                      <a href="#book">PRENOTA ORA</a>
+                    </Button>
+                  </SheetTrigger>
+                </div>
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   );
@@ -109,7 +170,9 @@ function Hero() {
 
       <div className="mx-auto flex min-h-[88vh] max-w-7xl flex-col justify-center px-6 pb-20 pt-44">
         <p className="animate-fade-up font-display text-sm uppercase tracking-[0.3em] text-accent">
-          In diretta da Roma
+          <a href="#top" className="font-display text-3xl tracking-wide text-cream">
+            Mr Barry <span className="text-accent">Roma</span>
+          </a>
         </p>
         <h1 className="mt-4 max-w-3xl animate-fade-up font-display text-3xl leading-[0.95] text-cream text-balance sm:text-4xl md:text-6xl">
           Organizza il tuo evento privato
