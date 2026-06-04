@@ -40,6 +40,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  CarouselDots,
 } from "@/components/ui/carousel";
 
 export const Route = createFileRoute("/")({
@@ -92,11 +93,8 @@ function TopBanner() {
 
 function Nav() {
   const navLinks = [
-    { href: "#events", label: "Eventi" },
-    { href: "#story", label: "Trama" },
-    { href: "#stage", label: "Palcoscenico" },
-    { href: "#reviews", label: "Recensioni" },
-    { href: "#book", label: "Libro" },
+    { href: "#contact", label: "CONTATTI" },
+    { href: "#careers", label: "LAVORA CON NOI" },
   ];
 
   return (
@@ -143,17 +141,6 @@ function Nav() {
                     </a>
                   </SheetTrigger>
                 ))}
-                <div className="pt-8 mt-8 border-t border-border">
-                  <SheetTrigger asChild>
-                    <Button
-                      asChild
-                      size="lg"
-                      className="w-full bg-gradient-gold text-gold-foreground shadow-gold hover:opacity-95"
-                    >
-                      <a href="#book">PRENOTA ORA</a>
-                    </Button>
-                  </SheetTrigger>
-                </div>
               </nav>
             </SheetContent>
           </Sheet>
@@ -204,8 +191,9 @@ function RichHeadline() {
     <section className="bg-background py-24">
       <div className="mx-auto max-w-5xl px-6 text-center">
         <p className="font-display text-sm uppercase tracking-[0.3em] text-primary">— Mr Barry</p>
-        <h4 className="mt-6 font-display text-4xl leading-tight text-foreground text-balance sm:text-6xl md:text-3xl">
-          Non affitti uno spazio crei un ricordo
+        <h4 className="mt-6 font-display text-4xl leading-tight text-foreground sm:text-6xl md:text-3xl">
+          <span className="whitespace-nowrap">Non affitti uno spazio</span>{" "}
+          <span className="whitespace-nowrap">crei un ricordo</span>
           {/* Non affitti uno spazio.<em className="text-primary">Crei</em> un ricordo.
           <br className="hidden md:block" />
           Ci sono luoghi a Roma dove puoi fare una{" "}
@@ -217,8 +205,9 @@ function RichHeadline() {
           . */}
         </h4>
         <p className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-          Ci sono luoghi a Roma dove puoi fare una festa. E poi c&rsquo;&egrave; Mr Barry. Non
-          affitti uno spazio porti via un&rsquo;esperienza.
+          Ci sono luoghi a Roma dove puoi fare una festa. E poi c&rsquo;&egrave; Mr Barry.{" "}
+          <span className="whitespace-nowrap">Non affitti uno spazio</span>{" "}
+          <span className="whitespace-nowrap">porti via un&rsquo;esperienza.</span>
         </p>
       </div>
     </section>
@@ -384,7 +373,7 @@ function ImageText() {
             size="lg"
             className="mt-10 bg-foreground text-background hover:opacity-90"
           >
-            <a href="#book">Contattaci</a>
+            <a href="#book">PRENOTA ORA</a>
           </Button>
         </div>
       </div>
@@ -443,11 +432,21 @@ function PhotoText() {
               </dd>
             </div>
           </dl>
+          <div className="mt-10">
+            <Button
+              asChild
+              size="lg"
+              className="bg-gradient-gold text-gold-foreground shadow-gold hover:opacity-95"
+            >
+              <a href="#book">PRENOTA ORA</a>
+            </Button>
+          </div>
         </div>
 
         <div className="order-1 md:order-2">
+          {/* Mobile version (2x2 grid in carousel) */}
           <div className="md:hidden">
-            <Carousel opts={{ align: "start", loop: false }} className="w-full">
+            <Carousel opts={{ align: "start", loop: true }} className="w-full">
               <CarouselContent className="ml-0">
                 {mobilePages.map((page, pageIndex) => (
                   <CarouselItem key={pageIndex} className="basis-full pl-0 pr-0">
@@ -478,34 +477,44 @@ function PhotoText() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="hidden md:flex" />
-              <CarouselNext className="hidden md:flex" />
+              <CarouselDots className="mt-6" />
+              <CarouselPrevious className="flex left-2 h-10 w-10 border-none bg-black/20 text-white backdrop-blur-md hover:bg-black/40 xl:-left-12 xl:bg-transparent" />
+              <CarouselNext className="flex right-2 h-10 w-10 border-none bg-black/20 text-white backdrop-blur-md hover:bg-black/40 xl:-right-12 xl:bg-transparent" />
             </Carousel>
           </div>
 
-          <div className="hidden gap-4 md:grid md:grid-cols-2 md:gap-6 xl:grid-cols-3">
-            {images.map((img, idx) => (
-              <div
-                key={idx}
-                className="group relative aspect-4/5 cursor-pointer overflow-hidden rounded-2xl bg-transparent transform-[translateZ(0)]"
-                onClick={() => {
-                  setStartIndex(idx);
-                  setOpen(true);
-                }}
-              >
-                <div className="pointer-events-none absolute inset-0 z-10 bg-black/0 transition-colors duration-700 group-hover:bg-black/20" />
-                <img
-                  src={img}
-                  alt={`Gallery image ${idx + 1}`}
-                  loading="lazy"
-                  className="block h-full w-full object-cover transition-transform duration-800 ease-out scale-[1.01] group-hover:scale-105 will-change-transform"
-                />
-              </div>
-            ))}
+          {/* Desktop version (1 image single slider) */}
+          <div className="hidden md:block">
+            <Carousel opts={{ align: "start", loop: true }} className="w-full">
+              <CarouselContent className="ml-0">
+                {images.map((img, idx) => (
+                  <CarouselItem key={idx} className="basis-full pl-0 pr-0">
+                    <div
+                      className="group relative aspect-[4/3] cursor-pointer overflow-hidden rounded-2xl bg-transparent transform-[translateZ(0)]"
+                      onClick={() => {
+                        setStartIndex(idx);
+                        setOpen(true);
+                      }}
+                    >
+                      <div className="pointer-events-none absolute inset-0 z-10 bg-black/0 transition-colors duration-700 group-hover:bg-black/20" />
+                      <img
+                        src={img}
+                        alt={`Gallery image ${idx + 1}`}
+                        loading="lazy"
+                        className="block h-full w-full object-cover transition-transform duration-800 ease-out scale-[1.01] group-hover:scale-105 will-change-transform"
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselDots className="mt-8" />
+              <CarouselPrevious className="flex -left-6 z-10 h-12 w-12 border-none bg-black/50 text-white backdrop-blur-md hover:bg-black/80 xl:-left-14 xl:bg-transparent xl:hover:bg-white/10" />
+              <CarouselNext className="flex -right-6 z-10 h-12 w-12 border-none bg-black/50 text-white backdrop-blur-md hover:bg-black/80 xl:-right-14 xl:bg-transparent xl:hover:bg-white/10" />
+            </Carousel>
           </div>
 
           <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="max-w-screen max-h-screen w-screen h-screen m-0 p-0 border-none rounded-none bg-black/95 flex flex-col justify-center items-center shadow-none [&>button]:text-white/60 [&>button]:hover:text-white [&>button]:bg-transparent [&>button]:border-none [&>button]:ring-0 [&>button:focus]:ring-0 [&>button]:outline-none [&>button]:w-16 [&>button]:h-16 [&>button]:top-4 [&>button]:right-4 md:[&>button]:right-8 md:[&>button]:top-8 [&>button_svg]:w-8 [&>button_svg]:h-8 [&>button]:transition-all [&>button]:z-50 [&>button]:flex [&>button]:items-center [&>button]:justify-center">
+            <DialogContent className="max-w-screen max-h-screen w-screen h-screen m-0 p-0 border-none rounded-none bg-black/95 flex flex-col justify-center items-center shadow-none [&>button:last-child]:fixed [&>button:last-child]:right-4 md:[&>button:last-child]:right-8 [&>button:last-child]:top-4 md:[&>button:last-child]:top-8 [&>button:last-child]:z-[100] [&>button:last-child]:flex [&>button:last-child]:h-12 [&>button:last-child]:w-12 [&>button:last-child]:items-center [&>button:last-child]:justify-center [&>button:last-child]:rounded-full [&>button:last-child]:bg-white/10 [&>button:last-child]:text-white/70 hover:[&>button:last-child]:bg-white/20 hover:[&>button:last-child]:text-white [&>button:last-child]:transition-all [&>button:last-child]:outline-none [&>button:last-child]:ring-0 focus:[&>button:last-child]:ring-0 focus-visible:[&>button:last-child]:ring-0 [&>button:last-child]:ring-offset-0 [&>button:last-child_svg]:h-6 [&>button:last-child_svg]:w-6 data-[state=open]:[&>button:last-child]:bg-white/10 data-[state=open]:[&>button:last-child]:text-white/70">
               <DialogTitle className="sr-only">Gallery Image Viewer</DialogTitle>
               <DialogDescription className="sr-only">
                 View full size images in carousel
@@ -513,13 +522,13 @@ function PhotoText() {
               <div className="w-full h-full max-w-[100vw] flex items-center justify-center relative select-none">
                 <Carousel
                   opts={{ startIndex, loop: true, align: "center" }}
-                  className="w-full h-full flex items-center"
+                  className="w-full h-[100dvh] flex items-center"
                 >
                   <CarouselContent className="h-full w-full flex items-center ml-0">
                     {images.map((img, idx) => (
                       <CarouselItem
                         key={idx}
-                        className="h-full w-full flex items-center justify-center pl-0 cursor-zoom-out"
+                        className="h-full w-full flex items-center justify-center pl-0 cursor-zoom-out p-4 md:p-12"
                         onClick={(e) => {
                           if (e.target === e.currentTarget) setOpen(false);
                         }}
@@ -527,20 +536,14 @@ function PhotoText() {
                         <img
                           src={img}
                           alt={`Gallery image ${idx + 1}`}
-                          className="max-h-[90vh] max-w-[90vw] object-contain shadow-2xl cursor-default"
+                          className="max-h-[85dvh] max-w-full object-contain shadow-2xl cursor-default rounded-md"
                           draggable="false"
                         />
                       </CarouselItem>
                     ))}
                   </CarouselContent>
-                  <CarouselPrevious
-                    variant="ghost"
-                    className="fixed left-4 md:left-10 h-16 w-16 bg-transparent hover:bg-white/10 text-white/60 hover:text-white border-none rounded-full transition-all [&_svg]:w-8 [&_svg]:h-8 z-50"
-                  />
-                  <CarouselNext
-                    variant="ghost"
-                    className="fixed right-4 md:right-10 h-16 w-16 bg-transparent hover:bg-white/10 text-white/60 hover:text-white border-none rounded-full transition-all [&_svg]:w-8 [&_svg]:h-8 z-50"
-                  />
+                  <CarouselPrevious className="flex fixed left-4 md:left-8 top-1/2 -translate-y-1/2 h-12 w-12 border-none bg-white/10 text-white/70 backdrop-blur-md hover:bg-white/20 hover:text-white transition-all z-50 [&_svg]:h-6 [&_svg]:w-6 outline-none ring-0 focus:ring-0 focus-visible:ring-0 focus-visible:outline-none" />
+                  <CarouselNext className="flex fixed right-4 md:right-8 top-1/2 -translate-y-1/2 h-12 w-12 border-none bg-white/10 text-white/70 backdrop-blur-md hover:bg-white/20 hover:text-white transition-all z-50 [&_svg]:h-6 [&_svg]:w-6 outline-none ring-0 focus:ring-0 focus-visible:ring-0 focus-visible:outline-none" />
                 </Carousel>
               </div>
             </DialogContent>
@@ -637,7 +640,7 @@ function Booking() {
 
 function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-foreground text-cream">
+    <footer id="contact" className="relative overflow-hidden bg-foreground text-cream">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-gold opacity-60" />
       <div className="mx-auto max-w-7xl px-6 py-20">
         <div className="grid gap-12 md:grid-cols-12">

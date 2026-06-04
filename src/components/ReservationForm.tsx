@@ -5,7 +5,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
-const EVENT_TYPES = ["Wedding", "Private Party", "Corporate", "Restaurant / Venue", "Festival", "Other"];
+const EVENT_TYPES = [
+  "Wedding",
+  "Private Party",
+  "Corporate",
+  "Restaurant / Venue",
+  "Festival",
+  "Other",
+];
 
 export function ReservationForm() {
   const [loading, setLoading] = useState(false);
@@ -32,13 +39,13 @@ export function ReservationForm() {
       // NOTE: Replace "YOUR_FORMSPREE_ENDPOINT" with the actual Formspree endpoint URL
       // Example: https://formspree.io/f/xknk...
       const formspreeEndpoint = "YOUR_FORMSPREE_ENDPOINT";
-      
+
       if (formspreeEndpoint !== "YOUR_FORMSPREE_ENDPOINT") {
         const response = await fetch(formspreeEndpoint, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Accept": "application/json"
+            Accept: "application/json",
           },
           body: JSON.stringify(payload),
         });
@@ -48,7 +55,7 @@ export function ReservationForm() {
         }
       } else {
         // Dummy waiting for visual feedback until API is attached
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
 
       setLoading(false);
@@ -83,15 +90,32 @@ export function ReservationForm() {
   const today = new Date().toISOString().split("T")[0];
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-5 rounded-xl border border-border bg-card p-6 shadow-elegant sm:p-10">
+    <form
+      onSubmit={handleSubmit}
+      className="grid gap-5 rounded-xl border border-border bg-card p-6 shadow-elegant sm:p-10"
+    >
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="grid gap-2">
           <Label htmlFor="full_name">Nome completo</Label>
-          <Input id="full_name" name="full_name" required minLength={2} maxLength={120} placeholder="Marco Rossi" />
+          <Input
+            id="full_name"
+            name="full_name"
+            required
+            minLength={2}
+            maxLength={120}
+            placeholder="Marco Rossi"
+          />
         </div>
         <div className="grid gap-2">
           <Label htmlFor="email">E-mail</Label>
-          <Input id="email" name="email" type="email" required maxLength={254} placeholder="you@example.com" />
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            required
+            maxLength={254}
+            placeholder="you@example.com"
+          />
         </div>
       </div>
 
@@ -116,28 +140,58 @@ export function ReservationForm() {
             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             defaultValue=""
           >
-            <option value="" disabled>Seleziona…</option>
-            {EVENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+            <option value="" disabled>
+              Seleziona…
+            </option>
+            {EVENT_TYPES.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
           </select>
         </div>
         <div className="grid gap-2">
           <Label htmlFor="guest_count">Ospiti (circa..)</Label>
-          <Input id="guest_count" name="guest_count" type="number" min={1} max={100000} placeholder="80" />
+          <Input
+            id="guest_count"
+            name="guest_count"
+            type="number"
+            min={1}
+            max={100000}
+            placeholder="80"
+          />
         </div>
       </div>
 
       <div className="grid gap-2">
         <Label htmlFor="location">Luogo / sede</Label>
-        <Input id="location" name="location" required maxLength={200} placeholder="Roma, Villa Borghese" />
+        <Input
+          id="location"
+          name="location"
+          required
+          maxLength={200}
+          placeholder="Roma, Villa Borghese"
+        />
       </div>
 
       <div className="grid gap-2">
         <Label htmlFor="message">Raccontaci del tuo evento</Label>
-        <Textarea id="message" name="message" maxLength={2000} rows={4} placeholder="Style, repertoire wishes, timing…" />
+        <Textarea
+          id="message"
+          name="message"
+          maxLength={2000}
+          rows={4}
+          placeholder="Style, repertoire wishes, timing…"
+        />
       </div>
 
-      <Button type="submit" size="lg" disabled={loading} className="bg-gradient-warm text-primary-foreground hover:opacity-95">
-        {loading ? "Sending…" : "Richiedi la band"}
+      <Button
+        type="submit"
+        size="lg"
+        disabled={loading}
+        className="bg-gradient-warm text-primary-foreground hover:opacity-95"
+      >
+        {loading ? "Sending…" : "PRENOTA ORA"}
       </Button>
     </form>
   );
