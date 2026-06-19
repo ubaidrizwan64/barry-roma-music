@@ -67,7 +67,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="relative min-h-screen bg-background text-foreground">
       <Nav />
       <Hero />
       <RichHeadline />
@@ -98,17 +98,21 @@ function Nav() {
   ];
 
   return (
-    <header className="absolute inset-x-0 top-2 z-30 bg-transparent bg-gradient-to-b from-foreground/5">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
-        <a href="#top" className="font-display text-2xl tracking-wide text-cream"></a>
+    <header className="sticky inset-x-0 top-0 z-50 bg-foreground/95 backdrop-blur-md shadow-lg border-b border-cream/10 py-5">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
+        <div className="flex flex-col">
+          <a href="#top" className="font-display text-2xl tracking-wide text-cream">
+            Mr Barry <span className="text-accent">Roma</span>
+          </a>
+        </div>
 
         {/* Desktop Nav */}
         <nav className="hidden gap-8 text-sm text-cream/80 md:flex">
-          {navLinks.map((link) => (
-            <a key={link.href} href={link.href} className="transition hover:text-cream">
-              {link.label}
-            </a>
-          ))}
+          {/* {navLinks.map((link) => (
+            // <a key={link.href} href={link.href} className="transition hover:text-cream">
+            //   {link.label}
+            // </a>
+          ))} */}
         </nav>
 
         {/* Mobile Nav */}
@@ -131,7 +135,7 @@ function Nav() {
               <SheetTitle className="sr-only">Navigazione</SheetTitle>
               <SheetDescription className="sr-only">Menu di navigazione del sito</SheetDescription>
               <nav className="flex flex-col gap-6 mt-12 text-center">
-                {navLinks.map((link) => (
+                {/* {navLinks.map((link) => (
                   <SheetTrigger asChild key={link.href}>
                     <a
                       href={link.href}
@@ -140,7 +144,7 @@ function Nav() {
                       {link.label}
                     </a>
                   </SheetTrigger>
-                ))}
+                ))} */}
               </nav>
             </SheetContent>
           </Sheet>
@@ -163,11 +167,6 @@ function Hero() {
       <div className="absolute inset-0 -z-10 bg-gradient-overlay" />
 
       <div className="mx-auto flex min-h-[88vh] max-w-7xl flex-col justify-center px-6 pb-20 pt-44">
-        <p className="animate-fade-up font-display text-sm uppercase tracking-[0.3em] text-accent">
-          <a href="#top" className="font-display text-3xl tracking-wide text-cream">
-            Mr Barry <span className="text-accent">Roma</span>
-          </a>
-        </p>
         <h1 className="mt-4 max-w-3xl animate-fade-up font-display text-3xl leading-[0.95] text-cream text-balance sm:text-4xl md:text-6xl">
           Organizza il tuo evento privato
         </h1>
@@ -557,22 +556,19 @@ function PhotoText() {
 function Reviews() {
   const reviews = [
     {
-      name: "Giulia & Marco",
-      role: "Matrimonio · Villa Aurelia",
+      name: "Elena",
       stars: 5,
-      body: "Non hanno semplicemente interpretato quella notte: l’hanno creata. Un sussurro a cena, una tempesta a mezzanotte. Puro cinema.",
+      body: "Serata fantastica al Mr Barry! Atmosfera elegante, musica ottima e cocktail di livello. Location perfetta per festeggiare in grande stile nel cuore di Trastevere. Torneremo sicuramente!",
     },
     {
-      name: "Luca R.",
-      role: "Laurea triennale · Roma",
+      name: "Lorenzo",
       stars: 5,
-      body: "Hanno reso il nostro terrazzo come un film. Ottaviano, soul, classici italiani — tutti parlano ancora di questo.",
+      body: "Abbiamo festeggiato una laurea qui e siamo rimasti colpiti dall'organizzazione e dallo staff. Privé comodi, sala bellissima, aperitivo ottimo. Da provare per ogni occasione speciale.",
     },
     {
-      name: "Acme Italia",
-      role: "Gala aziendale",
+      name: "Chiara",
       stars: 5,
-      body: "Raffinata, in linea con lo spirito del marchio e indimenticabile. La band ha accompagnato l'intera serata con eleganza.",
+      body: "Mr Barry è una gemma di Roma. locale raffinato, musica live coinvolgente e un'energia unica. Perfetto sia per una serata tranquilla che per festeggiare. Consigliato!",
     },
   ];
   return (
@@ -650,9 +646,8 @@ function Footer() {
               Mr Barry <span className="text-accent">Roma</span>
             </a>
             <p className="mt-4 hidden max-w-sm text-sm leading-relaxed text-cream/70 md:block">
-              Una band italiana dal sound cinematografico, radicata nella tradizione della dolce
-              vita. Calde note di ottoni, voci intime, serate indimenticabili: da Roma a qualsiasi
-              luogo ci chiamiate.
+              Trastevere's finest club. Aperitivi, cene, DJ set e serate live nel cuore di Roma.
+              Prenota il tuo tavolo o organizza il tuo evento privato.
             </p>
             <div className="mt-6 flex gap-3">
               <a
@@ -660,9 +655,10 @@ function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Instagram"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-cream/15 transition hover:border-accent hover:text-accent"
+                className="inline-flex h-10 items-center gap-2 rounded-full border border-cream/15 px-4 transition hover:border-accent hover:text-accent"
               >
                 <Instagram className="h-4 w-4" />
+                <span className="text-sm">@mrbarry.roma</span>
               </a>
               {/* <a
                 href="mailto:hello@mrbarryroma.com"
@@ -675,7 +671,7 @@ function Footer() {
           </div>
 
           {/* Explore */}
-          <div className="hidden md:block md:col-span-3">
+          {/* <div className="hidden md:block md:col-span-3">
             <p className="font-display text-xs uppercase tracking-[0.3em] text-accent">Esplora</p>
             <ul className="mt-5 space-y-3 text-sm text-cream/80">
               <li>
@@ -704,7 +700,7 @@ function Footer() {
                 </a>
               </li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Contact */}
           <div className="md:col-span-4">
@@ -717,13 +713,13 @@ function Footer() {
               <li className="flex items-start gap-3">
                 <Mail className="mt-0.5 h-4 w-4 text-accent" />
                 <a href="mailto:hello@mrbarryroma.com" className="transition hover:text-accent">
-                  hello@mrbarryroma.com
+                  mrbarryroma@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <Phone className="mt-0.5 h-4 w-4 text-accent" />
-                <a href="tel:+390000000000" className="transition hover:text-accent">
-                  +39 000 000 0000
+                <a href="tel:+393453599345" className="transition hover:text-accent">
+                  +39 345 359 9345
                 </a>
               </li>
             </ul>
