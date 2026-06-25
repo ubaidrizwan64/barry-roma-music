@@ -14,16 +14,20 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import heroImg from "@/assets/hero-band.jpeg";
+import logoImg from "@/assets/logo.svg";
 import gallery1 from "@/assets/gallery-1.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
-import gallery5 from "@/assets/gallery-5.jpeg";
-import gallery6 from "@/assets/gallery-6.jpeg";
-import gallery7 from "@/assets/gallery-7.jpeg";
-import gallery8 from "@/assets/gallery-8.jpeg";
-import gallery9 from "@/assets/gallery-9.jpeg";
-import gallery10 from "@/assets/gallery-10.jpeg";
+import gallery5 from "@/assets/gallery-5.jpg";
+import gallery6 from "@/assets/gallery-6.jpg";
+import gallery7 from "@/assets/gallery-7.jpg";
+import gallery8 from "@/assets/gallery-8.jpg";
+import gallery9 from "@/assets/gallery-9.jpg";
+import gallery11 from "@/assets/gallery-11.jpg";
+import gallery12 from "@/assets/gallery-12.jpg";
+import gallery13 from "@/assets/gallery-13.jpg";
+import gallery14 from "@/assets/gallery-14.jpg";
 import featureBand from "@/assets/feature-band.jpg";
 import featureEvent from "@/assets/feature-event.jpg";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -99,10 +103,10 @@ function Nav() {
 
   return (
     <header className="sticky inset-x-0 top-0 z-50 bg-foreground/95 backdrop-blur-md shadow-lg border-b border-cream/10 py-5">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
-        <div className="flex flex-col">
-          <a href="#top" className="font-display text-2xl tracking-wide text-cream">
-            Mr Barry <span className="text-accent">Roma</span>
+      <div className="mx-auto flex max-w-7xl items-center justify-center px-6">
+        <div className="flex items-center">
+          <a href="#top">
+            <img src={logoImg} alt="Mr Barry Roma" className="h-20 w-auto" />
           </a>
         </div>
 
@@ -115,8 +119,8 @@ function Nav() {
           ))} */}
         </nav>
 
-        {/* Mobile Nav */}
-        <div className="md:hidden">
+        {/* Mobile Nav (hidden) */}
+        {/* <div className="md:hidden">
           <Sheet>
             <SheetTrigger asChild>
               <Button
@@ -135,20 +139,10 @@ function Nav() {
               <SheetTitle className="sr-only">Navigazione</SheetTitle>
               <SheetDescription className="sr-only">Menu di navigazione del sito</SheetDescription>
               <nav className="flex flex-col gap-6 mt-12 text-center">
-                {/* {navLinks.map((link) => (
-                  <SheetTrigger asChild key={link.href}>
-                    <a
-                      href={link.href}
-                      className="font-display text-2xl text-foreground hover:text-primary transition-colors"
-                    >
-                      {link.label}
-                    </a>
-                  </SheetTrigger>
-                ))} */}
               </nav>
             </SheetContent>
           </Sheet>
-        </div>
+        </div> */}
       </div>
     </header>
   );
@@ -157,21 +151,25 @@ function Nav() {
 function Hero() {
   return (
     <section id="top" className="relative isolate overflow-hidden">
-      <img
-        src={heroImg}
-        alt="Mr Barry Roma performing live with brass instruments and candlelight"
-        width={1920}
-        height={1080}
-        className="absolute inset-0 -z-10 h-full w-full object-cover"
-      />
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        poster={heroImg}
+        className="absolute inset-0 -z-10 h-full w-full object-cover object-center"
+      >
+        <source src="/hero-video-optimized.mp4" type="video/mp4" />
+      </video>
       <div className="absolute inset-0 -z-10 bg-gradient-overlay" />
 
-      <div className="mx-auto flex min-h-[88vh] max-w-7xl flex-col justify-center px-6 pb-20 pt-44">
-        <h1 className="mt-4 max-w-3xl animate-fade-up font-display text-3xl leading-[0.95] text-cream text-balance sm:text-4xl md:text-6xl">
+      <div className="mx-auto flex min-h-[55vh] sm:min-h-[65vh] md:min-h-[85vh] max-w-7xl flex-col justify-end px-4 sm:px-6 pb-12 sm:pb-16 md:pb-20 pt-20 sm:pt-28 md:pt-44">
+        <h1 className="max-w-3xl animate-fade-up font-display text-2xl leading-[0.95] text-cream text-balance sm:text-3xl md:text-6xl">
           Organizza il tuo evento privato
         </h1>
-        <p className="mt-6 max-w-xl animate-fade-up text-lg leading-relaxed text-cream/85"></p>
-        <div className="mt-10 flex animate-fade-up flex-wrap gap-4">
+        <p className="mt-4 sm:mt-6 max-w-xl animate-fade-up text-base sm:text-lg leading-relaxed text-cream/85"></p>
+        <div className="mt-6 sm:mt-8 md:mt-10 flex animate-fade-up flex-wrap gap-4">
           <Button
             asChild
             size="lg"
@@ -189,7 +187,7 @@ function RichHeadline() {
   return (
     <section className="bg-background py-24">
       <div className="mx-auto max-w-5xl px-6 text-center">
-        <p className="font-display text-sm uppercase tracking-[0.3em] text-primary">— Mr Barry</p>
+        <p className="font-subtitle text-sm uppercase tracking-[0.3em] text-primary">— Mr Barry</p>
         <h4 className="mt-6 font-display text-4xl leading-tight text-foreground sm:text-6xl md:text-3xl">
           <span className="whitespace-nowrap">Non affitti uno spazio</span>{" "}
           <span className="whitespace-nowrap">crei un ricordo</span>
@@ -239,7 +237,7 @@ function EventCards() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex items-end justify-between gap-6">
           <div>
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-primary">— Eventi</p>
+            <p className="font-subtitle text-sm uppercase tracking-[0.3em] text-primary">— Eventi</p>
             <h2 className="mt-3 font-display text-4xl text-foreground text-balance sm:text-5xl">
               Quali eventi puoi organizzare con Mr. Barry:
             </h2>
@@ -333,13 +331,13 @@ function ImageText() {
             />
           </div>
           <div className="absolute -bottom-6 -right-6 hidden rounded-xl bg-foreground px-6 py-4 text-cream shadow-elegant md:block">
-            <p className="font-display text-3xl text-accent">9 yrs</p>
-            <p className="text-xs uppercase tracking-[0.3em] text-cream/70">insieme sul palco</p>
+            <p className="font-display text-3xl text-accent">9 anni</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-cream/70">di esperienza</p>
           </div>
         </div>
 
         <div>
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-primary">
+          <p className="font-subtitle text-sm uppercase tracking-[0.3em] text-primary">
             — La nostra storia
           </p>
           <h2 className="mt-4 font-display text-4xl text-foreground text-balance sm:text-5xl">
@@ -391,7 +389,10 @@ function PhotoText() {
     gallery7,
     gallery8,
     gallery9,
-    gallery10,
+    gallery11,
+    gallery12,
+    gallery13,
+    gallery14,
   ];
   const mobilePages = Array.from({ length: Math.ceil(images.length / 4) }, (_, pageIndex) => ({
     startIndex: pageIndex * 4,
@@ -404,7 +405,7 @@ function PhotoText() {
     <section id="stage" className="bg-foreground py-28 text-cream">
       <div className="mx-auto grid max-w-7xl gap-14 px-6 md:grid-cols-2 md:items-center">
         <div className="order-2 md:order-1">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-accent">— Sul palco</p>
+          <p className="font-subtitle text-sm uppercase tracking-[0.3em] text-accent">— Sul palco</p>
           <h2 className="mt-4 font-display text-4xl text-cream text-balance sm:text-3xl">
             Ogni completo, realizzato su misura come un capo di alta moda.
           </h2>
@@ -575,7 +576,7 @@ function Reviews() {
     <section id="reviews" className="bg-secondary py-28">
       <div className="mx-auto max-w-7xl px-6">
         <div className="max-w-2xl">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-primary">
+          <p className="font-subtitle text-sm uppercase tracking-[0.3em] text-primary">
             — Recensioni
           </p>
           <h2 className="mt-4 font-display text-4xl text-foreground text-balance sm:text-4xl">
@@ -612,13 +613,13 @@ function Booking() {
     <section id="book" className="relative overflow-hidden bg-background py-28">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 md:grid-cols-5">
         <div className="md:col-span-2">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-primary">— Prenota</p>
+          <p className="font-subtitle text-sm uppercase tracking-[0.3em] text-primary">— Prenota</p>
           <h2 className="mt-4 font-display text-4xl text-foreground text-balance sm:text-6xl">
-            Orgamizza il tuo evento
+            Organizza il tuo evento
           </h2>
           <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-            Raccontaci della tua serata. Di solito rispondiamo entro 24 ore con la disponibilità e
-            una proposta su misura — repertorio, line-up e tecnica incluse.
+            inserisci i dettagli del tuo evento, Ti rispondiamo entro 24 ore. Ti prepariamo una
+            proposta a misura basata sulla tua idea
           </p>
           <ul className="mt-8 space-y-3 text-sm text-foreground/80">
             <li></li>
@@ -642,8 +643,8 @@ function Footer() {
         <div className="grid gap-12 md:grid-cols-12">
           {/* Brand */}
           <div className="md:col-span-5">
-            <a href="#top" className="font-display text-3xl tracking-wide">
-              Mr Barry <span className="text-accent">Roma</span>
+            <a href="#top">
+              <img src={logoImg} alt="Mr Barry Roma" className="h-24 w-auto" />
             </a>
             <p className="mt-4 hidden max-w-sm text-sm leading-relaxed text-cream/70 md:block">
               Trastevere's finest club. Aperitivi, cene, DJ set e serate live nel cuore di Roma.
@@ -672,7 +673,7 @@ function Footer() {
 
           {/* Explore */}
           {/* <div className="hidden md:block md:col-span-3">
-            <p className="font-display text-xs uppercase tracking-[0.3em] text-accent">Esplora</p>
+            <p className="font-subtitle text-xs uppercase tracking-[0.3em] text-accent">Esplora</p>
             <ul className="mt-5 space-y-3 text-sm text-cream/80">
               <li>
                 <a href="#events" className="transition hover:text-accent">
@@ -704,7 +705,7 @@ function Footer() {
 
           {/* Contact */}
           <div className="md:col-span-4">
-            <p className="font-display text-xs uppercase tracking-[0.3em] text-accent">Contatti</p>
+            <p className="font-subtitle text-xs uppercase tracking-[0.3em] text-accent">Contatti</p>
             <ul className="mt-5 space-y-3 text-sm text-cream/80">
               <li className="flex items-start gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 text-accent" />
