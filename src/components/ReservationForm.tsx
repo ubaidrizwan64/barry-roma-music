@@ -6,12 +6,12 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
 const EVENT_TYPES = [
-  "Wedding",
-  "Private Party",
-  "Corporate",
-  "Restaurant / Venue",
+  "Matrimonio",
+  "Festa privata",
+  "Aziendale",
+  "Ristorante / Location",
   "Festival",
-  "Other",
+  "Altro",
 ];
 
 const FORMSPREE_ENDPOINT = import.meta.env.VITE_FORMSPREE_ENDPOINT;
@@ -35,7 +35,7 @@ export function ReservationForm() {
 
     // Bots typically submit far faster than a human filling a multi-field form.
     if (Date.now() - mountedAt.current < MIN_SUBMIT_TIME_MS) {
-      toast.error("Please take a moment to review your details before sending.");
+      toast.error("Prenditi un momento per controllare i dettagli prima di inviare.");
       return;
     }
 
@@ -51,32 +51,49 @@ export function ReservationForm() {
     };
 
     if (payload.full_name.length < 2) {
-      toast.error("Please enter your full name.");
+      toast.error("Inserisci il tuo nome completo.");
       return;
     }
     if (!EMAIL_PATTERN.test(payload.email)) {
-      toast.error("Please enter a valid e-mail address.");
+      toast.error("Inserisci un indirizzo e-mail valido.");
       return;
     }
     if (!payload.event_date || new Date(payload.event_date) < new Date(new Date().toDateString())) {
-      toast.error("Please choose a valid, upcoming event date.");
+      toast.error("Seleziona una data dell'evento valida e futura.");
       return;
     }
     if (!payload.event_type) {
-      toast.error("Please select an event type.");
+      toast.error("Seleziona il tipo di evento.");
       return;
     }
     if (!payload.location) {
-      toast.error("Please enter the event location.");
+      toast.error("Inserisci il luogo dell'evento.");
       return;
     }
 
     if (!FORMSPREE_ENDPOINT) {
-      toast.error("Booking form is not configured yet.");
+      toast.error("Il modulo di prenotazione non è ancora configurato.");
       return;
     }
 
     setLoading(true);
+
+    // Field names below become the column/label names shown in the Formspree
+    // inbox and notification e-mail, so they're written in Italian to match
+    // the site. Keys starting with "_" are Formspree's reserved control fields
+    // and must stay as-is.
+    const formspreePayload = {
+      "Nome completo": payload.full_name,
+      "E-mail": payload.email,
+      Telefono: payload.phone,
+      "Data dell'evento": payload.event_date,
+      "Tipo di evento": payload.event_type,
+      "Luogo / sede": payload.location,
+      "Ospiti (circa)": payload.guest_count,
+      "Messaggio": payload.message,
+      _subject: `Nuova richiesta evento — ${payload.full_name}`,
+      _replyto: payload.email,
+    };
 
     try {
       const response = await fetch(FORMSPREE_ENDPOINT, {
@@ -85,11 +102,7 @@ export function ReservationForm() {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify({
-          ...payload,
-          _subject: `Nuova richiesta evento — ${payload.full_name}`,
-          _replyto: payload.email,
-        }),
+        body: JSON.stringify(formspreePayload),
       });
 
       if (!response.ok) {
@@ -98,14 +111,14 @@ export function ReservationForm() {
 
       setLoading(false);
       setDone(true);
-      toast.success("Grazie! Your request has been received.", {
-        description: "We'll get back to you within 24 hours.",
+      toast.success("Grazie! La tua richiesta è stata ricevuta.", {
+        description: "Ti risponderemo entro 24 ore.",
       });
       form.reset();
       mountedAt.current = Date.now();
     } catch (error: any) {
       setLoading(false);
-      toast.error("Could not send your request", { description: error.message });
+      toast.error("Non è stato possibile inviare la richiesta", { description: error.message });
     }
   };
 
@@ -120,7 +133,7 @@ export function ReservationForm() {
           La tua richiesta è stata ricevuta. Ti contatteremo entro 24 ore per confermare i dettagli.
         </p>
         <Button variant="outline" className="mt-6" onClick={() => setDone(false)}>
-          Send another request
+          Invia un'altra richiesta
         </Button>
       </div>
     );
@@ -229,7 +242,7 @@ export function ReservationForm() {
           name="message"
           maxLength={2000}
           rows={4}
-          placeholder="Style, repertoire wishes, timing…"
+          placeholder="Stile, repertorio desiderato, orari…"
         />
       </div>
 
@@ -239,7 +252,7 @@ export function ReservationForm() {
         disabled={loading}
         className="bg-gradient-warm text-primary-foreground hover:opacity-95"
       >
-        {loading ? "Sending…" : "PRENOTA ORA"}
+        {loading ? "Invio…" : "PRENOTA ORA"}
       </Button>
     </form>
   );
