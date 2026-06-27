@@ -12,9 +12,10 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Logo } from "@/components/Logo";
+import { useReveal } from "@/hooks/useReveal";
 import heroImg from "@/assets/hero-band.jpeg";
-import logoImg from "@/assets/logo.svg";
 import gallery1 from "@/assets/gallery-1.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
@@ -101,12 +102,53 @@ function Nav() {
     { href: "#careers", label: "LAVORA CON NOI" },
   ];
 
+  const headerRef = useRef<HTMLElement>(null);
+  const [navTilt, setNavTilt] = useState({ rx: 0, ry: 0, gx: 50, gy: 50 });
+  const [navHover, setNavHover] = useState(false);
+
+  const reducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+  const handleNavMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (reducedMotion) return;
+    const rect = headerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    setNavTilt({
+      rx: (0.5 - py) * 18,
+      ry: (px - 0.5) * 22,
+      gx: px * 100,
+      gy: py * 100,
+    });
+  };
+
+  const handleNavMouseLeave = () => {
+    setNavHover(false);
+    setNavTilt({ rx: 0, ry: 0, gx: 50, gy: 50 });
+  };
+
   return (
-    <header className="sticky inset-x-0 top-0 z-50 bg-foreground/95 backdrop-blur-md shadow-lg border-b border-cream/10 py-5">
-      <div className="mx-auto flex max-w-7xl items-center justify-center px-6">
+    <header
+      ref={headerRef}
+      onMouseMove={handleNavMouseMove}
+      onMouseEnter={() => setNavHover(true)}
+      onMouseLeave={handleNavMouseLeave}
+      className={`nav-tilt-bar sticky inset-x-0 top-0 z-50 overflow-hidden bg-foreground/95 backdrop-blur-md shadow-lg border-b border-cream/10 py-5 ${navHover ? "is-hovering" : ""}`}
+      style={{ ["--glow-x" as string]: `${navTilt.gx}%`, ["--glow-y" as string]: `${navTilt.gy}%` }}
+    >
+      <span className="nav-glow-overlay" aria-hidden="true" />
+      <div
+        className="nav-tilt-inner mx-auto flex max-w-7xl items-center justify-center px-6"
+        style={{
+          transform: `rotateX(${navTilt.rx}deg) rotateY(${navTilt.ry}deg) scale(${navHover ? 1.06 : 1})`,
+          transition: navHover ? "transform 120ms ease-out" : "transform 450ms cubic-bezier(0.16,1,0.3,1)",
+        }}
+      >
         <div className="flex items-center">
           <a href="#top">
-            <img src={logoImg} alt="Mr Barry Roma" className="h-20 w-auto" />
+            <Logo className="h-20 w-auto" />
           </a>
         </div>
 
@@ -184,9 +226,10 @@ function Hero() {
 }
 
 function RichHeadline() {
+  const { ref, inView } = useReveal<HTMLDivElement>();
   return (
     <section className="bg-background py-24">
-      <div className="mx-auto max-w-5xl px-6 text-center">
+      <div ref={ref} className={`reveal-up mx-auto max-w-5xl px-6 text-center ${inView ? "in-view" : ""}`}>
         <p className="font-subtitle text-sm uppercase tracking-[0.3em] text-primary">— Mr Barry</p>
         <h4 className="mt-6 font-display text-4xl leading-tight text-foreground sm:text-6xl md:text-3xl">
           <span className="whitespace-nowrap">Non affitti uno spazio</span>{" "}
@@ -232,19 +275,29 @@ function EventCards() {
       tag: "",
     },
   ];
+  const heading = useReveal<HTMLDivElement>();
+  const cards = useReveal<HTMLDivElement>();
   return (
     <section id="events" className="bg-secondary py-24">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex items-end justify-between gap-6">
+        <div
+          ref={heading.ref}
+          className={`reveal-up flex items-end justify-between gap-6 ${heading.inView ? "in-view" : ""}`}
+        >
           <div>
-            <p className="font-subtitle text-sm uppercase tracking-[0.3em] text-primary">— Eventi</p>
+            <p className="font-subtitle text-sm uppercase tracking-[0.3em] text-primary">
+              — Eventi
+            </p>
             <h2 className="mt-3 font-display text-4xl text-foreground text-balance sm:text-5xl">
               Quali eventi puoi organizzare con Mr. Barry:
             </h2>
           </div>
         </div>
 
-        <div className="mt-14 grid gap-6 md:grid-cols-3 [perspective:1200px]">
+        <div
+          ref={cards.ref}
+          className={`reveal-stagger mt-14 grid gap-6 md:grid-cols-3 [perspective:1200px] ${cards.inView ? "in-view" : ""}`}
+        >
           {events.map(({ icon: Icon, title, body, tag }, i) => (
             <FlipCard key={title} index={i} Icon={Icon} title={title} body={body} tag={tag} />
           ))}
@@ -316,10 +369,15 @@ function FlipCard({ index, Icon, title, body, tag }: FlipCardProps) {
 }
 
 function ImageText() {
+  const image = useReveal<HTMLDivElement>();
+  const text = useReveal<HTMLDivElement>();
   return (
     <section id="story" className="bg-background py-28">
       <div className="mx-auto grid max-w-7xl gap-14 px-6 md:grid-cols-2 md:items-center">
-        <div className="relative">
+        <div
+          ref={image.ref}
+          className={`reveal-left relative ${image.inView ? "in-view" : ""}`}
+        >
           <div className="aspect-[4/5] overflow-hidden rounded-2xl shadow-elegant">
             <img
               src={featureBand}
@@ -336,7 +394,7 @@ function ImageText() {
           </div>
         </div>
 
-        <div>
+        <div ref={text.ref} className={`reveal-right ${text.inView ? "in-view" : ""}`}>
           <p className="font-subtitle text-sm uppercase tracking-[0.3em] text-primary">
             — La nostra storia
           </p>
@@ -400,12 +458,18 @@ function PhotoText() {
   }));
   const [open, setOpen] = useState(false);
   const [startIndex, setStartIndex] = useState(0);
+  const text = useReveal<HTMLDivElement>();
 
   return (
     <section id="stage" className="bg-foreground py-28 text-cream">
       <div className="mx-auto grid max-w-7xl gap-14 px-6 md:grid-cols-2 md:items-center">
-        <div className="order-2 md:order-1">
-          <p className="font-subtitle text-sm uppercase tracking-[0.3em] text-accent">— Sul palco</p>
+        <div
+          ref={text.ref}
+          className={`reveal-left order-2 md:order-1 ${text.inView ? "in-view" : ""}`}
+        >
+          <p className="font-subtitle text-sm uppercase tracking-[0.3em] text-accent">
+            — Sul palco
+          </p>
           <h2 className="mt-4 font-display text-4xl text-cream text-balance sm:text-3xl">
             Ogni completo, realizzato su misura come un capo di alta moda.
           </h2>
@@ -416,17 +480,17 @@ function PhotoText() {
           </p>
           <dl className="mt-10 grid grid-cols-3 gap-6 border-t border-cream/15 pt-8">
             <div>
-              <dt className="font-display text-4xl text-accent">270</dt>
+              <dt className="font-display text-4xl text-accent">75</dt>
               <dd className="mt-1 text-xs uppercase tracking-widest text-cream/60">Compleanni</dd>
             </div>
             <div>
-              <dt className="font-display text-4xl text-accent">120 </dt>
+              <dt className="font-display text-4xl text-accent">28</dt>
               <dd className="mt-1 text-xs uppercase tracking-widest text-cream/60">
                 Adii al celibato
               </dd>
             </div>
             <div>
-              <dt className="font-display text-4xl text-accent">97</dt>
+              <dt className="font-display text-4xl text-accent">42</dt>
               <dd className="mt-1 text-xs uppercase tracking-widest text-cream/60">
                 Eventi aziendali
               </dd>
@@ -572,10 +636,15 @@ function Reviews() {
       body: "Mr Barry è una gemma di Roma. locale raffinato, musica live coinvolgente e un'energia unica. Perfetto sia per una serata tranquilla che per festeggiare. Consigliato!",
     },
   ];
+  const heading = useReveal<HTMLDivElement>();
+  const cards = useReveal<HTMLDivElement>();
   return (
     <section id="reviews" className="bg-secondary py-28">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="max-w-2xl">
+        <div
+          ref={heading.ref}
+          className={`reveal-up max-w-2xl ${heading.inView ? "in-view" : ""}`}
+        >
           <p className="font-subtitle text-sm uppercase tracking-[0.3em] text-primary">
             — Recensioni
           </p>
@@ -583,7 +652,10 @@ function Reviews() {
             Chi ha già organizzato eventi insieme a noi.
           </h2>
         </div>
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
+        <div
+          ref={cards.ref}
+          className={`reveal-stagger mt-14 grid gap-6 md:grid-cols-3 ${cards.inView ? "in-view" : ""}`}
+        >
           {reviews.map((r) => (
             <article
               key={r.name}
@@ -609,10 +681,15 @@ function Reviews() {
 }
 
 function Booking() {
+  const info = useReveal<HTMLDivElement>();
+  const form = useReveal<HTMLDivElement>();
   return (
     <section id="book" className="relative overflow-hidden bg-background py-28">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 md:grid-cols-5">
-        <div className="md:col-span-2">
+        <div
+          ref={info.ref}
+          className={`reveal-up md:col-span-2 ${info.inView ? "in-view" : ""}`}
+        >
           <p className="font-subtitle text-sm uppercase tracking-[0.3em] text-primary">— Prenota</p>
           <h2 className="mt-4 font-display text-4xl text-foreground text-balance sm:text-6xl">
             Organizza il tuo evento
@@ -627,7 +704,11 @@ function Booking() {
             <li></li>
           </ul>
         </div>
-        <div className="md:col-span-3">
+        <div
+          ref={form.ref}
+          className={`reveal-up md:col-span-3 ${form.inView ? "in-view" : ""}`}
+          style={{ transitionDelay: form.inView ? "120ms" : "0ms" }}
+        >
           <ReservationForm />
         </div>
       </div>
@@ -644,7 +725,7 @@ function Footer() {
           {/* Brand */}
           <div className="md:col-span-5">
             <a href="#top">
-              <img src={logoImg} alt="Mr Barry Roma" className="h-24 w-auto" />
+              <Logo className="h-24 w-auto" />
             </a>
             <p className="mt-4 hidden max-w-sm text-sm leading-relaxed text-cream/70 md:block">
               Trastevere's finest club. Aperitivi, cene, DJ set e serate live nel cuore di Roma.
@@ -713,7 +794,7 @@ function Footer() {
               </li>
               <li className="flex items-start gap-3">
                 <Mail className="mt-0.5 h-4 w-4 text-accent" />
-                <a href="mailto:hello@mrbarryroma.com" className="transition hover:text-accent">
+                <a href="mailto:mrbarryroma@gmail.com" className="transition hover:text-accent">
                   mrbarryroma@gmail.com
                 </a>
               </li>

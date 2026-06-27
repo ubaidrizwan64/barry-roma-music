@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,14 +14,31 @@ const EVENT_TYPES = [
   "Other",
 ];
 
+const FORMSPREE_ENDPOINT = import.meta.env.VITE_FORMSPREE_ENDPOINT;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MIN_SUBMIT_TIME_MS = 2000;
+
 export function ReservationForm() {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+  const mountedAt = useRef(Date.now());
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const fd = new FormData(form);
+
+    // Honeypot: bots tend to fill every field, humans never see this one.
+    if (String(fd.get("_gotcha") || "").trim() !== "") {
+      return;
+    }
+
+    // Bots typically submit far faster than a human filling a multi-field form.
+    if (Date.now() - mountedAt.current < MIN_SUBMIT_TIME_MS) {
+      toast.error("Please take a moment to review your details before sending.");
+      return;
+    }
+
     const payload = {
       full_name: String(fd.get("full_name") || "").trim(),
       email: String(fd.get("email") || "").trim(),
@@ -33,29 +50,50 @@ export function ReservationForm() {
       message: String(fd.get("message") || "").trim() || null,
     };
 
+    if (payload.full_name.length < 2) {
+      toast.error("Please enter your full name.");
+      return;
+    }
+    if (!EMAIL_PATTERN.test(payload.email)) {
+      toast.error("Please enter a valid e-mail address.");
+      return;
+    }
+    if (!payload.event_date || new Date(payload.event_date) < new Date(new Date().toDateString())) {
+      toast.error("Please choose a valid, upcoming event date.");
+      return;
+    }
+    if (!payload.event_type) {
+      toast.error("Please select an event type.");
+      return;
+    }
+    if (!payload.location) {
+      toast.error("Please enter the event location.");
+      return;
+    }
+
+    if (!FORMSPREE_ENDPOINT) {
+      toast.error("Booking form is not configured yet.");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      // NOTE: Replace "YOUR_FORMSPREE_ENDPOINT" with the actual Formspree endpoint URL
-      // Example: https://formspree.io/f/xknk...
-      const formspreeEndpoint = "YOUR_FORMSPREE_ENDPOINT";
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          ...payload,
+          _subject: `Nuova richiesta evento — ${payload.full_name}`,
+          _replyto: payload.email,
+        }),
+      });
 
-      if (formspreeEndpoint !== "YOUR_FORMSPREE_ENDPOINT") {
-        const response = await fetch(formspreeEndpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify(payload),
-        });
-
-        if (!response.ok) {
-          throw new Error("Formspree submission failed");
-        }
-      } else {
-        // Dummy waiting for visual feedback until API is attached
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (!response.ok) {
+        throw new Error("Formspree submission failed");
       }
 
       setLoading(false);
@@ -64,6 +102,7 @@ export function ReservationForm() {
         description: "We'll get back to you within 24 hours.",
       });
       form.reset();
+      mountedAt.current = Date.now();
     } catch (error: any) {
       setLoading(false);
       toast.error("Could not send your request", { description: error.message });
@@ -94,6 +133,15 @@ export function ReservationForm() {
       onSubmit={handleSubmit}
       className="grid gap-5 rounded-xl border border-border bg-card p-6 shadow-elegant sm:p-10"
     >
+      <input
+        type="text"
+        name="_gotcha"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute -left-2499.75 h-0 w-0 opacity-0"
+      />
+
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="grid gap-2">
           <Label htmlFor="full_name">Nome completo</Label>
