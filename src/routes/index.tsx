@@ -259,8 +259,8 @@ function EventCards() {
   const events = [
     {
       icon: Cake,
-      title: "COMPLEANNO",
-      body: "La notte che ti aspettavi / da anni Quello che vuoi è semplice: entrare, festeggiare, non pensare a niente. Noi ci occupiamo del resto tavolo riservato, bottiglia di benvenuto, playlist, torta, sorprese se vuoi.",
+      title: "Festeggia in grande stile.",
+      body: "Un tavolo riservato, un servizio dedicato e l’eleganza di una notte firmata MrBarry. Tu vivi la festa, noi ci occupiamo del resto.",
       tag: "",
     },
     {
@@ -397,20 +397,16 @@ function ImageText() {
 
         <div ref={text.ref} className={`reveal-right ${text.inView ? "in-view" : ""}`}>
           <p className="font-subtitle text-sm uppercase tracking-[0.3em] text-primary">
-            — La nostra storia
+            — LA NOSTRA STORIA
           </p>
           <h2 className="mt-4 font-display text-4xl text-foreground text-balance sm:text-5xl">
-            Mr. Barry Roma
+            MrBarry Roma
           </h2>
           <p className="mt-6 text-lg leading-relaxed text-muted-foreground text-justify">
-            C'è una differenza tra un locale che fa eventi privati e un locale che sa fare eventi
-            privati. La differenza si sente nell'aria, nel modo in cui ti risponde il team, in come
-            finisce la serata.
+            L’esclusività non nasce per caso. È il risultato di esperienza, attenzione e passione per l’eccellenza.
           </p>
           <p className="mt-4 text-lg leading-relaxed text-muted-foreground text-justify">
-            In sei anni abbiamo organizzato centinaia di eventi, oggi sappiamo esattamente cosa
-            serve per far funzionare una serata e cosa basta perché vada storta. L'obiettivo non è
-            fare una bella serata. È fare quella di cui parlate ancora dopo sei mesi.
+            Da oltre sei anni accogliamo chi desidera vivere serate raffinate, dove ogni dettaglio contribuisce a creare un’esperienza autentica. Perché un evento ben riuscito non si misura solo da come inizia, ma da quanto a lungo viene ricordato.
           </p>
 
           <Button
@@ -458,15 +454,17 @@ function PhotoText() {
           className={`reveal-left order-2 md:order-1 ${text.inView ? "in-view" : ""}`}
         >
           <p className="font-subtitle text-sm uppercase tracking-[0.3em] text-accent">
-            — Sul palco
+            — SUL PALCO
           </p>
           <h2 className="mt-4 font-display text-4xl text-cream text-balance sm:text-3xl">
-            Ogni completo, realizzato su misura come un capo di alta moda.
+            Dove la notte prende forma. E resta con te. 
           </h2>
           <p className="mt-6 text-lg leading-relaxed text-cream/75">
-            Non una sala. Un'identità. Porti i tuoi ospiti in un posto che ha già una storia,
-            un'energia, una reputazione. Non devono immaginare l'atmosfera la respirano appena
-            entrano.
+            Ogni dettaglio è pensato per farti vivere un’esperienza unica.
+
+            Atmosfera, musica, servizio e stile: qui nulla è lasciato al caso.
+
+            Solo serate che diventano ricordi.
           </p>
           <dl className="mt-10 grid grid-cols-3 gap-6 border-t border-cream/15 pt-8">
             <div>
@@ -780,7 +778,7 @@ function Footer() {
             <ul className="mt-5 space-y-3 text-sm text-cream/80">
               <li className="flex items-start gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 text-accent" />
-                <span>MrRoma, Piazza dei Ponziani 8/C, Roma</span>
+                <span>MrBarry, Piazza dei Ponziani 8/C, Roma</span>
               </li>
               <li className="flex items-start gap-3">
                 <Mail className="mt-0.5 h-4 w-4 text-accent" />
