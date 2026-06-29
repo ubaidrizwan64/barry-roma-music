@@ -259,7 +259,7 @@ function EventCards() {
   const events = [
     {
       icon: Cake,
-      title: "Festeggia in grande stile.",
+      title: "FESTEGGIA IN GRANDE STILE.",
       body: "Un tavolo riservato, un servizio dedicato e l’eleganza di una notte firmata MrBarry. Tu vivi la festa, noi ci occupiamo del resto.",
       tag: "",
     },
